@@ -1,4 +1,3 @@
-
 import random
 
 lista_palavras_secretas = []
@@ -9,37 +8,17 @@ with open('palavras_secretas.txt', 'r') as arquivo_palavras:
 
 tamanho_lista_palavras_secretas = len(lista_palavras_secretas) - 1
 
-numero_aleatorio = random.randint(0, tamanho_lista_palavras_secretas)
+num_palavra_aleatoria = random.randint(0, tamanho_lista_palavras_secretas)
 
-palavra_secreta = lista_palavras_secretas[numero_aleatorio]
+palavra_secreta = lista_palavras_secretas[num_palavra_aleatoria]
 
 underscores_palavra_secreta = ["_"] * len(palavra_secreta)
 
-tentativas = 10
+tentativas = 8
 
-print("Voce está jogando Forca!\n\n")
 
-print('Digite "chutar" se acha que sabe qual é a palavra\n')
-
-print("A dica é: Frutas\n")
-
-while tentativas > 0:
-
-    if "_" in underscores_palavra_secreta:
-        print(f"Vidas restantes: {tentativas}")
-
-    for letra in underscores_palavra_secreta:
-        print(letra, end=" ")
-
-    if "_" not in underscores_palavra_secreta: break
-
-    chute_letra_usuario = input(" - Digite seu chute: ")
-
-    print()
-
-    chute_nao_eh_letra = not chute_letra_usuario.isalpha()
-    chute_n_tem_nada = chute_letra_usuario == ""
-    chute_ta_errado = chute_letra_usuario not in palavra_secreta
+def logica_chutar_final():
+    global tentativas
 
     if chute_letra_usuario == "chutar":
         print("Quer mesmo tentar acertar a palavra secreta? se errar você perde.\n")
@@ -59,15 +38,43 @@ while tentativas > 0:
                 print("\nA palavra secreta é:")
                 print(palavra_secreta.upper())
 
-                break
+                return True
             else:
 
                 print("\nErrado")
 
                 tentativas = 0
-                break
+                return True
         else:
-            print("\nOk. Mas isso lhe custou uma vida.\n")
+            print("\nIsso lhe custou uma vida.\n")
+
+
+print("Voce está jogando Forca!\n\n")
+
+print('Digite "chutar" se acha que sabe qual é a palavra secreta\n')
+
+print("A dica é: Frutas\n")
+
+while tentativas > 0:
+
+    if "_" in underscores_palavra_secreta:
+        print(f"Vidas restantes: {tentativas}")
+
+    for letra in underscores_palavra_secreta:
+        print(letra, end=" ")
+
+    if "_" not in underscores_palavra_secreta: break
+
+    chute_letra_usuario = input(" - Digite seu chute: ")
+
+    print()
+
+    chute_nao_eh_letra = not chute_letra_usuario.isalpha()
+    chute_n_tem_nada = chute_letra_usuario == ""
+    chute_ta_errado = chute_letra_usuario not in palavra_secreta or chute_letra_usuario in lista_palavras_secretas or len(chute_letra_usuario) > 1
+
+    if logica_chutar_final(): break
+
     if chute_n_tem_nada:
 
         print("Ei, digite alguma coisa pra jogar\n")
@@ -75,6 +82,10 @@ while tentativas > 0:
     elif chute_nao_eh_letra:
 
         print("Ei, digite apenas LETRAS\n")
+
+    elif chute_letra_usuario in lista_palavras_secretas:
+
+        print('Ei, se sabe qual é a palavra secreta, digite "chutar"\n')
 
     for i in range(len(palavra_secreta)):
 
